@@ -1,4 +1,4 @@
-package com.rogoz208.composenotesapp.feature_note.presentation.notes.components
+package com.rogoz208.composenotesapp.feature_note.presentation.notes
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Sort
@@ -34,11 +35,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.rogoz208.composenotesapp.feature_note.presentation.notes.NotesEvent
-import com.rogoz208.composenotesapp.feature_note.presentation.notes.NotesViewModel
+import com.rogoz208.composenotesapp.feature_note.presentation.notes.components.NoteItem
+import com.rogoz208.composenotesapp.feature_note.presentation.notes.components.OrderSection
+import com.rogoz208.composenotesapp.feature_note.presentation.util.Screen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,9 +58,10 @@ fun NotesScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
+                    navController.navigate(Screen.AddEditNoteScreen.route)
                 },
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clip(CircleShape)
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add note")
             }
@@ -113,7 +117,10 @@ fun NotesScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-
+                                navController.navigate(
+                                    Screen.AddEditNoteScreen.route +
+                                            "?noteId=${note.id}&noteColor=${note.color}"
+                                )
                             },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
